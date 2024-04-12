@@ -1,0 +1,42 @@
+---
+import { languages } from "@i18n/ui";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const currentLang = getLangFromUrl(Astro.url);
+const t = useTranslations(currentLang);
+---
+<script>
+  const langSelect = document.getElementById("langSelect");
+  langSelect?.addEventListener("change", (e) => {
+    const lang = e.target.value != null && e.target.value != "en" ? e.target.value : "";
+    window.location.href = `${window.location.protocol}//${window.location.host}/${lang}`;
+  })
+</script>
+<header>
+<h1>Polsoc</h1>
+<nav>
+ <a href={getRelativeLocaleUrl(currentLang, "/")}>{t("nav.home")}</a> 
+ <a href={getRelativeLocaleUrl(currentLang, "/rules")}>{t("nav.rules")}</a> 
+ <a href={getRelativeLocaleUrl(currentLang, "/contact")}>{t("nav.contact")}</a> 
+ <a href={getRelativeLocaleUrl(currentLang, "/announcements")}>{t("nav.announcements")}</a> 
+</nav>
+<select id="langSelect">
+{Object.entries(languages).map(([lang, label])=> (
+  <option value={lang}>{label}</option>
+))}
+</select>
+</header>
+<style>
+  header, nav{
+    display: flex;
+    align-items: center;
+  }
+  header {
+    justify-content: space-evenly;
+  }
+  nav {
+    gap: 10px;
+  }
+
+</style>
